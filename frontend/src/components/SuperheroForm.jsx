@@ -10,6 +10,7 @@ export default function SuperheroForm({ initialData, onSubmit, submitText }) {
   });
   const [logo, setLogo] = useState(null);
   const [newImages, setNewImages] = useState([]);
+  const [removedImages, setRemovedImages] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,8 +38,10 @@ export default function SuperheroForm({ initialData, onSubmit, submitText }) {
     formData.superpowers.forEach((sp) => data.append("superpowers", sp));
     if (logo) data.append("logo", logo);
     newImages.forEach((img) => data.append("images", img));
+    removedImages.forEach((img) => data.append("removedImages", img));
     onSubmit(data);
   };
+
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col bg-white gap-4">
@@ -129,29 +132,26 @@ export default function SuperheroForm({ initialData, onSubmit, submitText }) {
       <div>
         <label className="block font-semibold mb-1">Album Images</label>
         <div className="flex flex-wrap gap-2 mb-2">
-          {/* Existing images */}
-          {initialData.images?.map((img, idx) => (
-            <div key={idx} className="relative">
-              <img
-                src={`http://localhost:5000${img}`}
-                alt={`img-${idx}`}
-                className="w-24 h-24 object-cover rounded shadow"
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  const newImagesArr = [...initialData.images];
-                  newImagesArr.splice(idx, 1);
-                  initialData.images = newImagesArr;
-                }}
-                className="absolute top-0 right-0 bg-red-500 text-white rounded px-1 text-xs"
-              >
-                ×
-              </button>
-            </div>
-          ))}
-
-          {/* New images */}
+          {initialData.images
+            ?.filter((img) => !removedImages.includes(img))
+            .map((img, idx) => (
+              <div key={idx} className="relative">
+                <img
+                  src={`http://localhost:5000${img}`}
+                  alt={`img-${idx}`}
+                  className="w-24 h-24 object-cover rounded shadow"
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setRemovedImages((prev) => [...prev, img])
+                  }
+                  className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
           {newImages.map((img, idx) => (
             <div key={idx + 1000} className="relative">
               <img
@@ -161,10 +161,10 @@ export default function SuperheroForm({ initialData, onSubmit, submitText }) {
               />
               <button
                 type="button"
-                onClick={() => {
-                  setNewImages((prev) => prev.filter((_, i) => i !== idx));
-                }}
-                className="absolute top-0 right-0 bg-red-500 text-white rounded px-1 text-xs"
+                onClick={() =>
+                  setNewImages((prev) => prev.filter((_, i) => i !== idx))
+                }
+                className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm"
               >
                 ×
               </button>
@@ -178,6 +178,13 @@ export default function SuperheroForm({ initialData, onSubmit, submitText }) {
           className="text-sm"
         />
       </div>
+
+      <button
+        type="submit"
+        className="bg-blue-700 text-blue-300 px-4 py-2 rounded hover:bg-blue-800 transition"
+      >
+        {submitText}
+      </button>
     </form>
   );
 }

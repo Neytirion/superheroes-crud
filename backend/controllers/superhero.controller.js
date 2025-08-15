@@ -76,6 +76,13 @@ export const updateSuperhero = async (req, res) => {
       hero.images.push(...newImages);
     }
 
+    if (req.body.removedImages) {
+      const removed = Array.isArray(req.body.removedImages)
+        ? req.body.removedImages
+        : [req.body.removedImages];
+      hero.images = hero.images.filter(img => !removed.includes(img));
+    }
+
     await hero.save();
     return res.json(hero);
   } catch (err) {
