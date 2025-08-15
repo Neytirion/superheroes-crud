@@ -4,16 +4,18 @@ export default function SuperheroCard({ hero, onClick }) {
   return (
     <li
       onClick={onClick}
-      className="w-56 rounded-lg overflow-hidden shadow hover:shadow-lg transition cursor-pointer"
+      className="w-56 rounded-lg overflow-hidden shadow transition cursor-pointer
+                 transform hover:scale-110 hover:shadow-2xl duration-500 ease-out
+                 border-2 border-transparent hover:border-blue-500"
     >
-      <div className="w-full aspect-[1/2.5]">
+      <div className="w-full aspect-[1/2.5] overflow-hidden">
         <img
           src={`http://localhost:5000${hero.logo}`}
           alt={hero.nickname}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover transition duration-500 ease-out transform hover:scale-125"
         />
       </div>
-      <div className="p-2 text-center">
+      <div className="p-2 text-center bg-blue-700 transition duration-500">
         <h2 className="text-lg font-semibold text-gray-300">{hero.nickname}</h2>
       </div>
     </li>
