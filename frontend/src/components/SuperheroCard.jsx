@@ -14,7 +14,7 @@ export default function SuperheroCard({ hero, onClick }) {
         />
       </div>
       <div className="p-2 text-center">
-        <h2 className="text-lg font-semibold">{hero.nickname}</h2>
+        <h2 className="text-lg font-semibold text-gray-300">{hero.nickname}</h2>
       </div>
     </li>
   );
