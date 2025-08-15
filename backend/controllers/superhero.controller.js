@@ -63,18 +63,16 @@ export const createSuperhero = async (req, res) => {
 export const updateSuperhero = async (req, res) => {
   try {
     const hero = await Superhero.findById(req.params.id);
-    if (!hero) {
-      return res.status(404).json({ message: "Superhero not found" });
-    }
+    if (!hero) return res.status(404).json({ message: "Superhero not found" });
 
     Object.assign(hero, req.body);
 
-    if (req.file) {
-      hero.logo = `/uploads/${req.file.filename}`;
+    if (req.files?.logo?.[0]) {
+      hero.logo = `/uploads/${req.files.logo[0].filename}`;
     }
 
-    if (req.files && req.files.length > 0) {
-      const newImages = req.files.map((file) => `/uploads/${file.filename}`);
+    if (req.files?.images) {
+      const newImages = req.files.images.map(file => `/uploads/${file.filename}`);
       hero.images.push(...newImages);
     }
 
@@ -82,10 +80,7 @@ export const updateSuperhero = async (req, res) => {
     return res.json(hero);
   } catch (err) {
     console.error(err);
-    return res.status(400).json({
-      message: "Failed to update superhero",
-      error: err.message
-    });
+    return res.status(400).json({ message: "Failed to update superhero", error: err.message });
   }
 };
 

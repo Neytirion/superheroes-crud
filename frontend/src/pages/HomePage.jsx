@@ -43,6 +43,7 @@ export default function HomePage() {
         {heroes.map((hero) => (
           <li
             key={hero._id}
+            onClick={() => navigate(`/edit/${hero._id}`)}
             className="flex-1 rounded-lg overflow-hidden shadow hover:shadow-lg transition"
           >
             <div className="w-full aspect-[1/2]">

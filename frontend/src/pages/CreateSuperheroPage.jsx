@@ -45,7 +45,7 @@ export default function CreateSuperheroPage() {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      navigate("/"); // возвращаем на главную
+      navigate("/");
     } catch (err) {
       console.error(err);
       setError("Failed to create superhero");

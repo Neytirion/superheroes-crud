@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage.jsx";
 import CreateSuperheroPage from "./pages/CreateSuperheroPage.jsx";
+import EditSuperheroPage from "./pages/EditSuperheroPage.jsx";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/create" element={<CreateSuperheroPage />} />
+          <Route path="/edit/:id" element={<EditSuperheroPage />} />
 
         </Routes>
       </Router>
