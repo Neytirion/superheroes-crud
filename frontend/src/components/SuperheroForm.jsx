@@ -45,140 +45,145 @@ export default function SuperheroForm({ initialData, onSubmit, submitText }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col bg-white gap-4">
-      {/* Nickname */}
-      <div>
-        <label className="block font-semibold mb-1">Nickname</label>
-        <input
-          type="text"
-          name="nickname"
-          value={formData.nickname}
-          onChange={handleChange}
-          className="border border-gray-300 rounded px-3 py-2 w-full"
-          required
-        />
-      </div>
-
-      {/* Real Name */}
-      <div>
-        <label className="block font-semibold mb-1">Real Name</label>
-        <input
-          type="text"
-          name="realName"
-          value={formData.realName}
-          onChange={handleChange}
-          className="border border-gray-300 rounded px-3 py-2 w-full"
-          required
-        />
-      </div>
-
-      {/* Origin Description */}
-      <div>
-        <label className="block font-semibold mb-1">Origin Description</label>
-        <textarea
-          name="originDescription"
-          value={formData.originDescription}
-          onChange={handleChange}
-          className="border border-gray-300 rounded px-3 py-2 w-full"
-          rows={3}
-        />
-      </div>
-
-      {/* Superpowers */}
-      <div>
-        <label className="block font-semibold mb-1">
-          Superpowers (comma separated)
-        </label>
-        <input
-          type="text"
-          value={formData.superpowers.join(", ")}
-          onChange={handleSuperpowersChange}
-          className="border border-gray-300 rounded px-3 py-2 w-full"
-        />
-      </div>
-
-      {/* Catch Phrase */}
-      <div>
-        <label className="block font-semibold mb-1">Catch Phrase</label>
-        <input
-          type="text"
-          name="catchPhrase"
-          value={formData.catchPhrase}
-          onChange={handleChange}
-          className="border border-gray-300 rounded px-3 py-2 w-full"
-        />
-      </div>
-
-      {/* Logo */}
-      <div>
-        <label className="block font-semibold mb-1">Logo</label>
-        {initialData.logo && !logo && (
-          <img
-            src={`http://localhost:5000${initialData.logo}`}
-            alt="logo"
-            className="w-32 h-32 object-cover rounded mb-2"
-          />
-        )}
-        {logo && (
-          <img
-            src={URL.createObjectURL(logo)}
-            alt="logo"
-            className="w-32 h-32 object-cover rounded mb-2 border-2 border-blue-500"
-          />
-        )}
-        <input type="file" onChange={handleLogoChange} className="text-sm" />
-      </div>
-
-      {/* Album Images */}
-      <div>
-        <label className="block font-semibold mb-1">Album Images</label>
-        <div className="flex flex-wrap gap-2 mb-2">
-          {initialData.images
-            ?.filter((img) => !removedImages.includes(img))
-            .map((img, idx) => (
-              <div key={idx} className="relative">
-                <img
-                  src={`http://localhost:5000${img}`}
-                  alt={`img-${idx}`}
-                  className="w-24 h-24 object-cover rounded shadow"
-                />
-                <button
-                  type="button"
-                  onClick={() =>
-                    setRemovedImages((prev) => [...prev, img])
-                  }
-                  className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm"
-                >
-                  ×
-                </button>
-              </div>
-            ))}
-          {newImages.map((img, idx) => (
-            <div key={idx + 1000} className="relative">
-              <img
-                src={URL.createObjectURL(img)}
-                alt={`new-${idx}`}
-                className="w-24 h-24 object-cover rounded shadow border-2 border-blue-500"
-              />
-              <button
-                type="button"
-                onClick={() =>
-                  setNewImages((prev) => prev.filter((_, i) => i !== idx))
-                }
-                className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm"
-              >
-                ×
-              </button>
-            </div>
-          ))}
+      <div className="flex gap-6">
+        {/* Logo Section */}
+        <div className="flex-shrink-0">
+          <label className="block font-semibold mb-1">Logo</label>
+          {initialData.logo && !logo && (
+            <img
+              src={`http://localhost:5000${initialData.logo}`}
+              alt="logo"
+              className="w-70 h-150 object-cover rounded mb-2"
+            />
+          )}
+          {logo && (
+            <img
+              src={URL.createObjectURL(logo)}
+              alt="logo"
+              className="w-70 h-150 object-cover rounded mb-2 border-2 border-blue-500"
+            />
+          )}
+          <input type="file" onChange={handleLogoChange} className="text-sm" />
         </div>
-        <input
-          type="file"
-          multiple
-          onChange={handleImagesChange}
-          className="text-sm"
-        />
-      </div>
 
+        {/* Fields Section */}
+        <div className="flex-1 flex flex-col gap-4">
+          {/* Nickname */}
+          <div>
+            <label className="block font-semibold mb-1">Nickname</label>
+            <input
+              type="text"
+              name="nickname"
+              value={formData.nickname}
+              onChange={handleChange}
+              className="border border-gray-300 rounded px-3 py-2 w-full"
+              required
+            />
+          </div>
+
+          {/* Real Name */}
+          <div>
+            <label className="block font-semibold mb-1">Real Name</label>
+            <input
+              type="text"
+              name="realName"
+              value={formData.realName}
+              onChange={handleChange}
+              className="border border-gray-300 rounded px-3 py-2 w-full"
+              required
+            />
+          </div>
+
+          {/* Origin Description */}
+          <div>
+            <label className="block font-semibold mb-1">Origin Description</label>
+            <textarea
+              name="originDescription"
+              value={formData.originDescription}
+              onChange={handleChange}
+              className="border border-gray-300 rounded px-3 py-2 w-full"
+              rows={3}
+            />
+          </div>
+
+          {/* Superpowers */}
+          <div>
+            <label className="block font-semibold mb-1">
+              Superpowers (comma separated)
+            </label>
+            <input
+              type="text"
+              value={formData.superpowers.join(", ")}
+              onChange={handleSuperpowersChange}
+              className="border border-gray-300 rounded px-3 py-2 w-full"
+            />
+          </div>
+
+          {/* Catch Phrase */}
+          <div>
+            <label className="block font-semibold mb-1">Catch Phrase</label>
+            <input
+              type="text"
+              name="catchPhrase"
+              value={formData.catchPhrase}
+              onChange={handleChange}
+              className="border border-gray-300 rounded px-3 py-2 w-full"
+            />
+          </div>
+
+          {/* Album Images */}
+          <div>
+            <label className="block font-semibold mb-1">Album Images</label>
+            <div className="flex flex-wrap gap-2 mb-2">
+              {initialData.images
+                ?.filter((img) => !removedImages.includes(img))
+                .map((img, idx) => (
+                  <div key={idx} className="relative">
+                    <img
+                      src={`http://localhost:5000${img}`}
+                      alt={`img-${idx}`}
+                      className="w-24 h-24 object-cover rounded shadow"
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setRemovedImages((prev) => [...prev, img])
+                      }
+                      className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              {newImages.map((img, idx) => (
+                <div key={idx + 1000} className="relative">
+                  <img
+                    src={URL.createObjectURL(img)}
+                    alt={`new-${idx}`}
+                    className="w-24 h-24 object-cover rounded shadow border-2 border-blue-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setNewImages((prev) => prev.filter((_, i) => i !== idx))
+                    }
+                    className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+            <input
+              type="file"
+              multiple
+              onChange={handleImagesChange}
+              className="text-sm"
+            />
+          </div>
+
+        </div>
+      </div>
       <button
         type="submit"
         className="bg-blue-700 text-blue-300 px-4 py-2 rounded hover:bg-blue-800 transition"
