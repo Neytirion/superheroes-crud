@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import SuperheroForm from "../components/SuperheroForm";
 import { api } from "../api/api";
-import BackButton from "../components/BackButton.jsx";
+import NavButton from "../components/NavButton.jsx";
 
 export default function EditSuperheroPage() {
   const { id } = useParams();
@@ -42,7 +42,7 @@ export default function EditSuperheroPage() {
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-800 to-indigo-900 text-white p-8">
       <div className="max-w-6xl mx-auto">
-        <BackButton to="/" label="Go Back" />
+        <NavButton to="/" className="">Go Back </NavButton>
         <h1 className="text-3xl font-bold mb-8">Edit Superhero</h1>
         <div className="bg-white text-black rounded-xl shadow-lg p-6">
           <SuperheroForm initialData={hero} onSubmit={handleSubmit} submitText="Save Changes" />
