@@ -18,10 +18,12 @@ export default function CreateSuperheroPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-800 to-indigo-900 text-white p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-800 to-red-900  p-8">
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold mb-8">Create Superhero</h1>
+        <div className="flex justify-between items-center mb-5">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600  to-red-500 bg-clip-text text-transparent">
+            Create Superhero
+          </h1>
           <NavButton to="/">Back</NavButton>
         </div>
         <div className="bg-white text-black rounded-xl shadow-lg p-6">

@@ -40,15 +40,15 @@ export default function EditSuperheroPage() {
   if (error) return <p className="p-4 text-red-300">{error}</p>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-800 to-indigo-900 text-white p-8">
+    <div className="min-h-screentext-white p-8">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">Edit Superhero</h1>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600  to-red-500 bg-clip-text text-transparent">Edit Superhero</h1>
           <NavButton
             to="/"
           >Back</NavButton>
         </div>
-        <div className="bg-white text-black rounded-xl shadow-lg p-6">
+        <div className="bg-white text-black rounded-xl shadow-lg p-6 ">
           <SuperheroForm
             initialData={hero}
             onSubmit={handleSubmit}

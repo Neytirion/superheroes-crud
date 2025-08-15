@@ -6,7 +6,7 @@ import EditSuperheroPage from "./pages/EditSuperheroPage.jsx";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-900 to-gray-900 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-blue-800 to-red-900 text-white">
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />

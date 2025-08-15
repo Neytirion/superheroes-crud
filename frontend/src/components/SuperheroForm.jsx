@@ -41,7 +41,7 @@ export default function SuperheroForm({ initialData, onSubmit, submitText }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className="flex flex-col bg-white gap-4">
       {/* Nickname */}
       <div>
         <label className="block font-semibold mb-1">Nickname</label>
@@ -156,7 +156,7 @@ export default function SuperheroForm({ initialData, onSubmit, submitText }) {
 
       <button
         type="submit"
-        className="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 transition"
+        className="bg-blue-700 text-blue-300 px-4 py-2 rounded hover:bg-blue-800 transition"
       >
         {submitText}
       </button>

@@ -37,7 +37,9 @@ export default function HomePage() {
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Superheroes</h1>
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600  to-red-500 bg-clip-text text-transparent">
+          Superheroes
+        </h1>
         <NavButton to="/create">Add your Superhero!</NavButton>
       </div>
 
