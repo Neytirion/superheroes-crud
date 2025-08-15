@@ -129,21 +129,46 @@ export default function SuperheroForm({ initialData, onSubmit, submitText }) {
       <div>
         <label className="block font-semibold mb-1">Album Images</label>
         <div className="flex flex-wrap gap-2 mb-2">
+          {/* Existing images */}
           {initialData.images?.map((img, idx) => (
-            <img
-              key={idx}
-              src={`http://localhost:5000${img}`}
-              alt={`img-${idx}`}
-              className="w-24 h-24 object-cover rounded shadow"
-            />
+            <div key={idx} className="relative">
+              <img
+                src={`http://localhost:5000${img}`}
+                alt={`img-${idx}`}
+                className="w-24 h-24 object-cover rounded shadow"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  const newImagesArr = [...initialData.images];
+                  newImagesArr.splice(idx, 1);
+                  initialData.images = newImagesArr;
+                }}
+                className="absolute top-0 right-0 bg-red-500 text-white rounded px-1 text-xs"
+              >
+                ×
+              </button>
+            </div>
           ))}
+
+          {/* New images */}
           {newImages.map((img, idx) => (
-            <img
-              key={idx + 1000}
-              src={URL.createObjectURL(img)}
-              alt={`new-${idx}`}
-              className="w-24 h-24 object-cover rounded shadow border-2 border-blue-500"
-            />
+            <div key={idx + 1000} className="relative">
+              <img
+                src={URL.createObjectURL(img)}
+                alt={`new-${idx}`}
+                className="w-24 h-24 object-cover rounded shadow border-2 border-blue-500"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  setNewImages((prev) => prev.filter((_, i) => i !== idx));
+                }}
+                className="absolute top-0 right-0 bg-red-500 text-white rounded px-1 text-xs"
+              >
+                ×
+              </button>
+            </div>
           ))}
         </div>
         <input
@@ -153,13 +178,6 @@ export default function SuperheroForm({ initialData, onSubmit, submitText }) {
           className="text-sm"
         />
       </div>
-
-      <button
-        type="submit"
-        className="bg-blue-700 text-blue-300 px-4 py-2 rounded hover:bg-blue-800 transition"
-      >
-        {submitText}
-      </button>
     </form>
   );
 }
