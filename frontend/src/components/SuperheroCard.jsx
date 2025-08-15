@@ -4,9 +4,9 @@ export default function SuperheroCard({ hero, onClick }) {
   return (
     <li
       onClick={onClick}
-      className="flex-1 rounded-lg overflow-hidden shadow hover:shadow-lg transition cursor-pointer"
+      className="w-56 rounded-lg overflow-hidden shadow hover:shadow-lg transition cursor-pointer"
     >
-      <div className="w-full aspect-[1/2]">
+      <div className="w-full aspect-[1/2.5]">
         <img
           src={`http://localhost:5000${hero.logo}`}
           alt={hero.nickname}

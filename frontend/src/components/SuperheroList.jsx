@@ -3,7 +3,7 @@ import SuperheroCard from "./SuperheroCard";
 
 export default function SuperheroList({ heroes, onCardClick }) {
   return (
-    <ul className="flex gap-8 flex-wrap">
+    <ul className="flex gap-15 justify-center">
       {heroes.map((hero) => (
         <SuperheroCard
           key={hero._id}
