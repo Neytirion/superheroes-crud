@@ -24,19 +24,23 @@ export default function HeroFields({ formData, setFormData }) {
           onChange={handleChange}
           className="border border-gray-300 rounded px-3 py-2 w-full"
           required
+          maxLength={50}
         />
       </div>
 
       <div>
-        <label className="block font-semibold mb-1">Real Name</label>
-        <input
-          type="text"
-          name="realName"
-          value={formData.realName}
-          onChange={handleChange}
-          className="border border-gray-300 rounded px-3 py-2 w-full"
-          required
-        />
+        <div>
+          <label className="block font-semibold mb-1">Real Name</label>
+          <input
+            type="text"
+            name="realName"
+            value={formData.realName}
+            onChange={handleChange}
+            className="border border-gray-300 rounded px-3 py-2 w-full"
+            required
+            maxLength={50}
+          />
+        </div>
       </div>
 
       <div>
