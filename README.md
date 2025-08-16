@@ -33,12 +33,6 @@ This is a full-stack web application for managing a superhero database. Users ca
 
 ```
 
-backend/      # Express backend
-frontend/     # React frontend
-uploads/      # Uploaded images
-
-
-
 ---
 
 ### Getting Started
