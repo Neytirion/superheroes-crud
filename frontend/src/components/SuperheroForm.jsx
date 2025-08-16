@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ImageViewer from "./ImageViewer";
 
 export default function SuperheroForm({ initialData, onSubmit, onDelete, submitText }) {
   const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ export default function SuperheroForm({ initialData, onSubmit, onDelete, submitT
   const [logo, setLogo] = useState(null);
   const [newImages, setNewImages] = useState([]);
   const [removedImages, setRemovedImages] = useState([]);
+  const [viewerIndex, setViewerIndex] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,6 +44,7 @@ export default function SuperheroForm({ initialData, onSubmit, onDelete, submitT
     onSubmit(data);
   };
 
+  const albumImages = initialData.images?.filter((img) => !removedImages.includes(img)) || [];
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col bg-white gap-4">
@@ -108,9 +111,7 @@ export default function SuperheroForm({ initialData, onSubmit, onDelete, submitT
 
           {/* Superpowers */}
           <div>
-            <label className="block font-semibold mb-1">
-              Superpowers (comma separated)
-            </label>
+            <label className="block font-semibold mb-1">Superpowers (comma separated)</label>
             <input
               type="text"
               value={formData.superpowers.join(", ")}
@@ -135,38 +136,35 @@ export default function SuperheroForm({ initialData, onSubmit, onDelete, submitT
           <div>
             <label className="block font-semibold mb-1">Album Images</label>
             <div className="flex flex-wrap gap-2 mb-2">
-              {initialData.images
-                ?.filter((img) => !removedImages.includes(img))
-                .map((img, idx) => (
-                  <div key={idx} className="relative">
-                    <img
-                      src={`http://localhost:5000${img}`}
-                      alt={`img-${idx}`}
-                      className="w-24 h-24 object-cover rounded shadow"
-                    />
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setRemovedImages((prev) => [...prev, img])
-                      }
-                      className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm"
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
+              {albumImages.map((img, idx) => (
+                <div key={idx} className="relative">
+                  <img
+                    src={`http://localhost:5000${img}`}
+                    alt={`img-${idx}`}
+                    className="w-24 h-24 object-cover rounded shadow cursor-pointer"
+                    onClick={() => setViewerIndex(idx)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setRemovedImages((prev) => [...prev, img])}
+                    className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+
               {newImages.map((img, idx) => (
                 <div key={idx + 1000} className="relative">
                   <img
                     src={URL.createObjectURL(img)}
                     alt={`new-${idx}`}
-                    className="w-24 h-24 object-cover rounded shadow border-2 border-blue-500"
+                    className="w-24 h-24 object-cover rounded shadow border-2 border-blue-500 cursor-pointer"
+                    onClick={() => setViewerIndex(albumImages.length + idx)}
                   />
                   <button
                     type="button"
-                    onClick={() =>
-                      setNewImages((prev) => prev.filter((_, i) => i !== idx))
-                    }
+                    onClick={() => setNewImages((prev) => prev.filter((_, i) => i !== idx))}
                     className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm"
                   >
                     ×
@@ -181,9 +179,9 @@ export default function SuperheroForm({ initialData, onSubmit, onDelete, submitT
               className="text-sm"
             />
           </div>
-
         </div>
       </div>
+
       <button
         type="submit"
         className="bg-blue-700 text-blue-300 px-4 py-2 rounded hover:bg-blue-800 transition"
@@ -201,6 +199,11 @@ export default function SuperheroForm({ initialData, onSubmit, onDelete, submitT
         </button>
       )}
 
+      <ImageViewer
+        images={[...albumImages, ...newImages.map((img) => URL.createObjectURL(img))]}
+        currentIndex={viewerIndex}
+        onClose={() => setViewerIndex(null)}
+      />
     </form>
   );
 }
