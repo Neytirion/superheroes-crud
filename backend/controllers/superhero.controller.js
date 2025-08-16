@@ -27,26 +27,24 @@ export const createSuperhero = async (req, res) => {
   try {
     const { nickname, realName } = req.body;
     if (!nickname || !realName) {
-      return res
-        .status(400)
-        .json({ message: "nickname and realName are required" });
+      return res.status(400).json({ message: "nickname and realName are required" });
     }
 
     let logoPath = null;
     let imagePaths = [];
 
-    if (req.file) {
-      logoPath = `/uploads/${req.file.filename}`;
+    if (req.files?.logo?.[0]) {
+      logoPath = `/uploads/${req.files.logo[0].filename}`;
     }
 
-    if (req.files && req.files.length > 0) {
-      imagePaths = req.files.map((file) => `/uploads/${file.filename}`);
+    if (req.files?.images) {
+      imagePaths = req.files.images.map((file) => `/uploads/${file.filename}`);
     }
 
     const hero = new Superhero({
       ...req.body,
       logo: logoPath,
-      images: imagePaths
+      images: imagePaths,
     });
 
     await hero.save();
@@ -55,10 +53,11 @@ export const createSuperhero = async (req, res) => {
     console.error(err);
     return res.status(400).json({
       message: "Failed to create superhero",
-      error: err.message
+      error: err.message,
     });
   }
 };
+
 
 export const updateSuperhero = async (req, res) => {
   try {

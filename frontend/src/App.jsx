@@ -12,7 +12,6 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/create" element={<CreateSuperheroPage />} />
           <Route path="/edit/:id" element={<EditSuperheroPage />} />
-
         </Routes>
       </Router>
     </div>
