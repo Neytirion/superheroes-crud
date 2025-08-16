@@ -15,7 +15,7 @@ export default function NavButton({ to, children, className }) {
   return (
     <button
       onClick={handleClick}
-      className={`bg-blue-900 text-blue-300 px-4 py-2 rounded hover:bg-blue-800 transition ${className || ""}`}
+      className={`bg-blue-700 text-blue-300 px-4 py-2 rounded hover:bg-blue-800 transition ${className || ""}`}
     >
       {children}
     </button>
