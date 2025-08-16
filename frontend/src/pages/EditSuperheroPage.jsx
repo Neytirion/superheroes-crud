@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import SuperheroForm from "../components/SuperheroForm";
+import SuperheroForm from "../components/SupertheroForm/SuperheroForm.jsx";
 import { api } from "../api/api";
 import NavButton from "../components/NavButton.jsx";
 
