@@ -1,56 +1,35 @@
-import fs from "fs";
-import path from "path";
 import Superhero from "../models/superhero.model.js";
-
-const deleteFile = (filePath) => {
-  if (!filePath) return;
-  const absolutePath = path.join(process.cwd(), filePath.replace(/^\/+/, ""));
-  if (fs.existsSync(absolutePath)) {
-    fs.unlink(absolutePath, (err) => {
-      if (err) console.error("Failed to delete file:", absolutePath, err);
-    });
-  }
-};
+import { deleteFile } from "../utils/file.js";
 
 export const getSuperheroes = async (req, res) => {
-  try {
-    const heroes = await Superhero.find().select("nickname logo").lean();
-    return res.json(heroes);
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Server error" });
-  }
+  const heroes = await Superhero.find().select("nickname logo").lean();
+  res.json(heroes);
 };
 
 export const getSuperheroById = async (req, res) => {
-  try {
-    const hero = await Superhero.findById(req.params.id).lean();
-    if (!hero) {
-      return res.status(404).json({ message: "Superhero not found" });
-    }
-    return res.json(hero);
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Server error" });
-  }
+  const hero = await Superhero.findById(req.params.id).lean();
+  if (!hero) return res.status(404).json({ message: "Superhero not found" });
+  res.json(hero);
 };
 
 export const createSuperhero = async (req, res) => {
+  const uploaded = [];
+
   try {
     const { nickname, realName } = req.body;
-    if (!nickname || !realName) {
-      return res.status(400).json({ message: "nickname and realName are required" });
-    }
+    if (!nickname || !realName) return res.status(400).json({ message: "nickname and realName are required" });
 
     let logoPath = null;
     let imagePaths = [];
 
     if (req.files?.logo?.[0]) {
       logoPath = `/uploads/${req.files.logo[0].filename}`;
+      uploaded.push(logoPath);
     }
 
     if (req.files?.images) {
-      imagePaths = req.files.images.map((file) => `/uploads/${file.filename}`);
+      imagePaths = req.files.images.map(f => `/uploads/${f.filename}`);
+      uploaded.push(...imagePaths);
     }
 
     const hero = new Superhero({
@@ -60,66 +39,45 @@ export const createSuperhero = async (req, res) => {
     });
 
     await hero.save();
-    return res.status(201).json(hero);
+    res.status(201).json(hero);
   } catch (err) {
-    console.error(err);
-    return res.status(400).json({
-      message: "Failed to create superhero",
-      error: err.message,
-    });
+    await Promise.all(uploaded.map(p => deleteFile(p)));
+    throw err;
   }
 };
 
 export const updateSuperhero = async (req, res) => {
-  try {
-    const hero = await Superhero.findById(req.params.id);
-    if (!hero) return res.status(404).json({ message: "Superhero not found" });
+  const hero = await Superhero.findById(req.params.id);
+  if (!hero) return res.status(404).json({ message: "Superhero not found" });
 
-    Object.assign(hero, req.body);
+  Object.assign(hero, req.body);
 
-    if (req.files?.logo?.[0]) {
-      if (hero.logo) {
-        deleteFile(hero.logo);
-      }
-      hero.logo = `/uploads/${req.files.logo[0].filename}`;
-    }
-
-    if (req.files?.images) {
-      const newImages = req.files.images.map(file => `/uploads/${file.filename}`);
-      hero.images.push(...newImages);
-    }
-
-    if (req.body.removedImages) {
-      const removed = Array.isArray(req.body.removedImages)
-        ? req.body.removedImages
-        : [req.body.removedImages];
-
-      removed.forEach(img => deleteFile(img));
-      hero.images = hero.images.filter(img => !removed.includes(img));
-    }
-
-    await hero.save();
-    return res.json(hero);
-  } catch (err) {
-    console.error(err);
-    return res.status(400).json({ message: "Failed to update superhero", error: err.message });
+  if (req.files?.logo?.[0]) {
+    if (hero.logo) await deleteFile(hero.logo);
+    hero.logo = `/uploads/${req.files.logo[0].filename}`;
   }
+
+  if (req.files?.images) {
+    const newImgs = req.files.images.map(f => `/uploads/${f.filename}`);
+    hero.images.push(...newImgs);
+  }
+
+  if (req.body.removedImages) {
+    const removed = Array.isArray(req.body.removedImages) ? req.body.removedImages : [req.body.removedImages];
+    await Promise.all(removed.map(p => deleteFile(p)));
+    hero.images = hero.images.filter(i => !removed.includes(i));
+  }
+
+  await hero.save();
+  res.json(hero);
 };
 
 export const deleteSuperhero = async (req, res) => {
-  try {
-    const hero = await Superhero.findByIdAndDelete(req.params.id);
-    if (!hero) {
-      return res.status(404).json({ message: "Superhero not found" });
-    }
-    if (hero.logo) deleteFile(hero.logo);
-    if (hero.images?.length) {
-      hero.images.forEach(img => deleteFile(img));
-    }
+  const hero = await Superhero.findByIdAndDelete(req.params.id);
+  if (!hero) return res.status(404).json({ message: "Superhero not found" });
 
-    return res.json({ message: "Superhero deleted successfully" });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Server error" });
-  }
+  if (hero.logo) await deleteFile(hero.logo);
+  if (hero.images?.length) await Promise.all(hero.images.map(img => deleteFile(img)));
+
+  res.json({ message: "Superhero deleted successfully" });
 };
