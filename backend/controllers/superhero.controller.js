@@ -1,4 +1,16 @@
+import fs from "fs";
+import path from "path";
 import Superhero from "../models/superhero.model.js";
+
+const deleteFile = (filePath) => {
+  if (!filePath) return;
+  const absolutePath = path.join(process.cwd(), filePath.replace(/^\/+/, ""));
+  if (fs.existsSync(absolutePath)) {
+    fs.unlink(absolutePath, (err) => {
+      if (err) console.error("Failed to delete file:", absolutePath, err);
+    });
+  }
+};
 
 export const getSuperheroes = async (req, res) => {
   try {
@@ -58,7 +70,6 @@ export const createSuperhero = async (req, res) => {
   }
 };
 
-
 export const updateSuperhero = async (req, res) => {
   try {
     const hero = await Superhero.findById(req.params.id);
@@ -67,6 +78,9 @@ export const updateSuperhero = async (req, res) => {
     Object.assign(hero, req.body);
 
     if (req.files?.logo?.[0]) {
+      if (hero.logo) {
+        deleteFile(hero.logo);
+      }
       hero.logo = `/uploads/${req.files.logo[0].filename}`;
     }
 
@@ -79,6 +93,8 @@ export const updateSuperhero = async (req, res) => {
       const removed = Array.isArray(req.body.removedImages)
         ? req.body.removedImages
         : [req.body.removedImages];
+
+      removed.forEach(img => deleteFile(img));
       hero.images = hero.images.filter(img => !removed.includes(img));
     }
 
@@ -96,6 +112,11 @@ export const deleteSuperhero = async (req, res) => {
     if (!hero) {
       return res.status(404).json({ message: "Superhero not found" });
     }
+    if (hero.logo) deleteFile(hero.logo);
+    if (hero.images?.length) {
+      hero.images.forEach(img => deleteFile(img));
+    }
+
     return res.json({ message: "Superhero deleted successfully" });
   } catch (err) {
     console.error(err);
